@@ -73,5 +73,46 @@ describe('User model', () => {
         expect(result).toBeFalsy();
       });
   });
-  it('can create an auth token', () =)
+  it('can create an auth token', () => {
+    const objectId = mongoose.Types.ObjectId();
+    return User.create({
+      username: 'megan',
+      password: 'password',
+      email: 'email@email.com',
+      issues: [objectId]
+    })
+      .then(user => {
+        const token = user.authToken();
+        const payload = untokenize(token);
+        expect(payload).toEqual({
+          username: 'megan',
+          email: 'email@email.com',
+          issues: [objectId.toString()],
+          _id: expect.any(String)
+        });
+      });
+  });
+  it('can find a token', () => {
+    const objectId = mongoose.Types.ObjectId();
+    return User.create({
+      username: 'megan',
+      password: 'password',
+      email: 'email@email.com',
+      issues: [objectId]
+    })
+      .then(payload => {
+        return tokenize(payload);
+      })
+      .then(token => {
+        return User.findByToken(token);
+      })
+      .then(foundUser => {
+        expect(foundUser).toEqual({
+          username: 'megan',
+          email: 'email@email.com',
+          _id: expect.any(String),
+          issues: [objectId.toString()]
+        });
+      });
+  });
 });
