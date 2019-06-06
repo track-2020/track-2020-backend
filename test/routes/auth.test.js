@@ -10,14 +10,14 @@ describe('auth routes', () => {
       .post('/api/v1/auth/signup')
       .send({
         username: 'bob',
-        email: 'email@email.com',
+        email: 'email@bob.com',
         password: 'hello',
         issues: [mongoose.Types.ObjectId()]
       })
       .then(res => {
         expect(res.body).toEqual({
           username: 'bob',
-          email: 'email@email.com',
+          email: 'email@bob.com',
           issues: expect.any(Array),
           _id: expect.any(String)
         });
@@ -27,7 +27,7 @@ describe('auth routes', () => {
   it('can sign in a user', () => { 
     return User.create({
       username: 'hello',
-      email: 'email@email.com',
+      email: 'email@hello.com',
       password: 'hello',
       issues: [mongoose.Types.ObjectId()]
     })
