@@ -6,17 +6,17 @@ describe('ensureAuth middlware', () => {
   it('validates a good token', done => {
     const token = tokenize({
       username: 'funky',
-      profilePhotoUrl: 'string.jpg'
     });
 
     const req = {
-      token
+      cookies: {
+        session: token
+      }
     };
     const res = {};
     const next = () => {
       expect(req.user).toEqual({
         username: 'funky',
-        profilePhotoUrl: 'string.jpg'
       });
       done();
     };
