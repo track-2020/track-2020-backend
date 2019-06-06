@@ -45,53 +45,7 @@ describe('User model', () => {
     });
     expect(user._tempPassword).toEqual('password');
   });
-  it('can compare passwords', async() => {
-    const objectId = mongoose.Types.ObjectId();
-    const user = await User.create({
-      username: 'megan',
-      password: 'password',
-      email: 'email.com',
-      issues: [objectId]
-    });
-      
-    const result = await user.compare('password');
-    expect(result).toBeTruthy();
-  });
 
-  it('can compare bad passwords', () => {
-    const objectId = mongoose.Types.ObjectId();
-    return User.create({
-      username: 'megan',
-      password: 'password',
-      email: 'email.com',
-      issues: [objectId]
-    })
-      .then(user => {
-        return user.compare('megan');
-      })
-      .then(result => {
-        expect(result).toBeFalsy();
-      });
-  });
-  it('can create an auth token', () => {
-    const objectId = mongoose.Types.ObjectId();
-    return User.create({
-      username: 'megan',
-      password: 'password',
-      email: 'email@email.com',
-      issues: [objectId]
-    })
-      .then(user => {
-        const token = user.authToken();
-        const payload = untokenize(token);
-        expect(payload).toEqual({
-          username: 'megan',
-          email: 'email@email.com',
-          issues: [objectId.toString()],
-          _id: expect.any(String)
-        });
-      });
-  });
   it('can find a token', () => {
     const objectId = mongoose.Types.ObjectId();
     return User.create({
