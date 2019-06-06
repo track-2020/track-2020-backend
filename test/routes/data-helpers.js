@@ -12,10 +12,9 @@ beforeAll(() => {
 const agent = request.agent(app);
 
 beforeEach(() => {
-  console.log('hey beforeEAch');
   return agent
     .post('/api/v1/auth/signup')
-    .send({ email: 'megan@megan', password: '1234', username: 'hello', issues: [mongoose.Types.ObjectId()] });
+    .send({ email: 'megan@megan', password: '1234', username: 'cindy', issues: [mongoose.Types.ObjectId()] });
 });
 
 afterEach((done) => {
