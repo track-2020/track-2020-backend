@@ -106,4 +106,37 @@ describe('candidates by users routes', () => {
         expect(res.body).toHaveLength(1);
       });
   });
+  it('can get a candidateByUser by id', () => {
+    return CandidateByUser.create(userCandidate)
+      .then(createdUserCand => {
+        return request(app)
+          .get(`/api/v1/candidatesByUsers/${createdUserCand._id}`);
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          candidate: expect.any(String),
+          issue1Score: {
+            issue: expect.any(String),
+            score: 0
+          },
+          issue2Score: {
+            issue: expect.any(String),
+            score: 0
+          },
+          issue3Score: {
+            issue: expect.any(String),
+            score: 0
+          },
+          issue4Score: {
+            issue: expect.any(String),
+            score: 0
+          },
+          issue5Score: {
+            issue: expect.any(String),
+            score: 0
+          },
+          _id: expect.any(String)
+        });
+      });
+  });
 });
