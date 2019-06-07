@@ -7,6 +7,11 @@ const mongoose = require('mongoose');
 
 const userCandidate = {
   candidate: mongoose.Types.ObjectId(),
+  user: mongoose.Types.ObjectId(),
+  issue0Score: {
+    issue: mongoose.Types.ObjectId(),
+    score: 0
+  },
   issue1Score: {
     issue: mongoose.Types.ObjectId(),
     score: 0
@@ -22,10 +27,6 @@ const userCandidate = {
   issue4Score: {
     issue: mongoose.Types.ObjectId(),
     score: 0
-  },
-  issue5Score: {
-    issue: mongoose.Types.ObjectId(),
-    score: 0
   }
 };
 
@@ -34,9 +35,9 @@ describe('candidates by users routes', () => {
     return connect();
   });
 
-  beforeEach((done) => {
-    return mongoose.connection.dropDatabase(done);
-  });
+  // beforeEach((done) => {
+  //   return mongoose.connection.dropDatabase(done);
+  // });
   
   afterAll(() => {
     return mongoose.connection.close();
@@ -47,6 +48,7 @@ describe('candidates by users routes', () => {
       .post('/api/v1/candidatesByUsers')
       .send({
         candidate: mongoose.Types.ObjectId(),
+        user: mongoose.Types.ObjectId(),
         issue1Score: {
           issue: mongoose.Types.ObjectId(),
           score: 0
@@ -63,7 +65,7 @@ describe('candidates by users routes', () => {
           issue: mongoose.Types.ObjectId(),
           score: 0
         },
-        issue5Score: {
+        issue0Score: {
           issue: mongoose.Types.ObjectId(),
           score: 0
         }
@@ -71,6 +73,7 @@ describe('candidates by users routes', () => {
       .then(res => {
         expect(res.body).toEqual({
           candidate: expect.any(String),
+          user: expect.any(String),
           issue1Score: {
             issue: expect.any(String),
             score: 0
@@ -87,7 +90,7 @@ describe('candidates by users routes', () => {
             issue: expect.any(String),
             score: 0
           },
-          issue5Score: {
+          issue0Score: {
             issue: expect.any(String),
             score: 0
           },
@@ -115,6 +118,7 @@ describe('candidates by users routes', () => {
       .then(res => {
         expect(res.body).toEqual({
           candidate: expect.any(String),
+          user: expect.any(String),
           issue1Score: {
             issue: expect.any(String),
             score: 0
@@ -131,9 +135,60 @@ describe('candidates by users routes', () => {
             issue: expect.any(String),
             score: 0
           },
-          issue5Score: {
+          issue0Score: {
             issue: expect.any(String),
             score: 0
+          },
+          _id: expect.any(String)
+        });
+      });
+  });
+  it('can update an issue score', () => {
+    return CandidateByUser.create(userCandidate)
+      .then(userCand => {
+        return request(app)
+          .patch(`/api/v1/candidatesByUsers/${userCand._id}`)
+          .send({
+            issue0Score: {
+              score: 2
+            },
+            issue1Score: {
+              score: 4
+            }, 
+            issue2Score: {
+              score: 5
+            },
+            issue3Score: {
+              score: 4
+            },
+            issue4Score: {
+              score: 1
+            }
+          });
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          candidate: expect.any(String),
+          user: expect.any(String),
+          issue0Score: {
+            issue: expect.any(String),
+            score: 2
+          },
+          issue1Score: {
+            issue: expect.any(String),
+            score: 4
+          },
+          issue2Score: {
+            issue: expect.any(String),
+            score: 5
+          },
+          issue3Score: {
+            issue: expect.any(String),
+            score: 4
+          },
+          issue4Score: {
+            issue: expect.any(String),
+            score: 1
           },
           _id: expect.any(String)
         });

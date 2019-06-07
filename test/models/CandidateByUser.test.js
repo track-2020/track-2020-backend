@@ -55,6 +55,10 @@ describe('candidateByUser model', () => {
   });
   it('has a required candidate and user field', () => {
     const candidateOne = new CandidateByUser({
+      issue0Score: {
+        issue: mongoose.Types.ObjectId(),
+        score: 0
+      },
       issue1Score: {
         issue: mongoose.Types.ObjectId(),
         score: 0
@@ -68,10 +72,6 @@ describe('candidateByUser model', () => {
         score: 0
       },
       issue4Score: {
-        issue: mongoose.Types.ObjectId(),
-        score: 0
-      },
-      issue5Score: {
         issue: mongoose.Types.ObjectId(),
         score: 0
       },
