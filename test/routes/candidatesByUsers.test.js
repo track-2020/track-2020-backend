@@ -5,6 +5,30 @@ const CandidateByUser = require('../../lib/models/CandidateByUser');
 const connect = require('../../lib/utils/connect');
 const mongoose = require('mongoose');
 
+const userCandidate = {
+  candidate: mongoose.Types.ObjectId(),
+  issue1Score: {
+    issue: mongoose.Types.ObjectId(),
+    score: 0
+  },
+  issue2Score: {
+    issue: mongoose.Types.ObjectId(),
+    score: 0
+  },
+  issue3Score: {
+    issue: mongoose.Types.ObjectId(),
+    score: 0
+  },
+  issue4Score: {
+    issue: mongoose.Types.ObjectId(),
+    score: 0
+  },
+  issue5Score: {
+    issue: mongoose.Types.ObjectId(),
+    score: 0
+  }
+};
+
 describe('candidates by users routes', () => {
   beforeAll(() => {
     return connect();
@@ -70,6 +94,16 @@ describe('candidates by users routes', () => {
           __v: 0,
           _id: expect.any(String)
         });
+      });
+  });
+  it('can get all candidatesByUsers', () => {
+    return CandidateByUser.create(userCandidate)
+      .then(() => {
+        return request(app)
+          .get('/api/v1/candidatesByUsers');
+      })
+      .then(res => {
+        expect(res.body).toHaveLength(1);
       });
   });
 });
