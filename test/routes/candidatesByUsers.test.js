@@ -194,4 +194,38 @@ describe('candidates by users routes', () => {
         });
       });
   });
+  it('deletes a candidateByUserById', () => {
+    return CandidateByUser.create(userCandidate)
+      .then(createdUserCand => {
+        return request(app)
+          .delete(`/api/v1/candidatesByUsers/${createdUserCand._id}`);
+      })
+      .then(deletedUserCand => {
+        expect(deletedUserCand.body).toEqual({
+          candidate: expect.any(String),
+          user: expect.any(String),
+          issue1Score: {
+            issue: expect.any(String),
+            score: 0
+          },
+          issue2Score: {
+            issue: expect.any(String),
+            score: 0
+          },
+          issue3Score: {
+            issue: expect.any(String),
+            score: 0
+          },
+          issue4Score: {
+            issue: expect.any(String),
+            score: 0
+          },
+          issue0Score: {
+            issue: expect.any(String),
+            score: 0
+          },
+          _id: expect.any(String)
+        });
+      });
+  });
 });
