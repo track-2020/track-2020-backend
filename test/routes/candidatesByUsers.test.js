@@ -5,7 +5,7 @@ const CandidateByUser = require('../../lib/models/CandidateByUser');
 const connect = require('../../lib/utils/connect');
 const mongoose = require('mongoose');
 
-describe('candidate by user routes', () => {
+describe('candidates by users routes', () => {
   beforeAll(() => {
     return connect();
   });
@@ -20,6 +20,56 @@ describe('candidate by user routes', () => {
   
   it('can create a new candidate by user', () => {
     return request(app)
-      .post('/api/vi/candidatesByUser')
-  })
-})
+      .post('/api/v1/candidatesByUsers')
+      .send({
+        candidate: mongoose.Types.ObjectId(),
+        issue1Score: {
+          issue: mongoose.Types.ObjectId(),
+          score: 0
+        },
+        issue2Score: {
+          issue: mongoose.Types.ObjectId(),
+          score: 0
+        },
+        issue3Score: {
+          issue: mongoose.Types.ObjectId(),
+          score: 0
+        },
+        issue4Score: {
+          issue: mongoose.Types.ObjectId(),
+          score: 0
+        },
+        issue5Score: {
+          issue: mongoose.Types.ObjectId(),
+          score: 0
+        }
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          candidate: expect.any(String),
+          issue1Score: {
+            issue: expect.any(String),
+            score: 0
+          },
+          issue2Score: {
+            issue: expect.any(String),
+            score: 0
+          },
+          issue3Score: {
+            issue: expect.any(String),
+            score: 0
+          },
+          issue4Score: {
+            issue: expect.any(String),
+            score: 0
+          },
+          issue5Score: {
+            issue: expect.any(String),
+            score: 0
+          },
+          __v: 0,
+          _id: expect.any(String)
+        });
+      });
+  });
+});

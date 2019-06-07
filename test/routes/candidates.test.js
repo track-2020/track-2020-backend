@@ -12,7 +12,6 @@ const coryBooker = {
 };
 
 describe('candidate routes', () => {
-
   beforeAll(() => {
     return connect();
   });

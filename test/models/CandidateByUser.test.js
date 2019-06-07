@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const CandidateByUser = require('../../lib/models/CandidateByUser');
 
 describe('candidate model', () => {
-  it('has name, bio, and image', () => {
+  it('has candidate and scores', () => {
     const candidateOne = new CandidateByUser({
       candidate: mongoose.Types.ObjectId(),
       issue1Score: {
