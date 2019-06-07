@@ -1,36 +1,18 @@
 require('dotenv').config();
 const request = require('supertest');
 const app = require('../../lib/app');
-const CandidateByUser = require('../../lib/models/CandidateByUser');
+const Scores = require('../../lib/models/Scores');
 const connect = require('../../lib/utils/connect');
 const mongoose = require('mongoose');
 
-const userCandidate = {
+const scoreTest = {
   candidate: mongoose.Types.ObjectId(),
   user: mongoose.Types.ObjectId(),
-  issue0Score: {
-    issue: mongoose.Types.ObjectId(),
-    score: 0
-  },
-  issue1Score: {
-    issue: mongoose.Types.ObjectId(),
-    score: 0
-  },
-  issue2Score: {
-    issue: mongoose.Types.ObjectId(),
-    score: 0
-  },
-  issue3Score: {
-    issue: mongoose.Types.ObjectId(),
-    score: 0
-  },
-  issue4Score: {
-    issue: mongoose.Types.ObjectId(),
-    score: 0
-  }
+  issue: mongoose.Types.ObjectId(),
+  score: 7
 };
 
-describe('candidates by users routes', () => {
+describe('scores routes', () => {
   beforeAll(() => {
     return connect();
   });
@@ -43,107 +25,53 @@ describe('candidates by users routes', () => {
     return mongoose.connection.close();
   });
   
-  it('can create a new candidate by user', () => {
+  it('can create a new score', () => {
     return request(app)
-      .post('/api/v1/candidatesByUsers')
+      .post('/api/v1/scores')
       .send({
         candidate: mongoose.Types.ObjectId(),
         user: mongoose.Types.ObjectId(),
-        issue1Score: {
-          issue: mongoose.Types.ObjectId(),
-          score: 0
-        },
-        issue2Score: {
-          issue: mongoose.Types.ObjectId(),
-          score: 0
-        },
-        issue3Score: {
-          issue: mongoose.Types.ObjectId(),
-          score: 0
-        },
-        issue4Score: {
-          issue: mongoose.Types.ObjectId(),
-          score: 0
-        },
-        issue0Score: {
-          issue: mongoose.Types.ObjectId(),
-          score: 0
-        }
+        issue: mongoose.Types.ObjectId(),
+        score: 8
       })
       .then(res => {
         expect(res.body).toEqual({
           candidate: expect.any(String),
           user: expect.any(String),
-          issue1Score: {
-            issue: expect.any(String),
-            score: 0
-          },
-          issue2Score: {
-            issue: expect.any(String),
-            score: 0
-          },
-          issue3Score: {
-            issue: expect.any(String),
-            score: 0
-          },
-          issue4Score: {
-            issue: expect.any(String),
-            score: 0
-          },
-          issue0Score: {
-            issue: expect.any(String),
-            score: 0
-          },
+          issue: expect.any(String),
+          score: 8,
           __v: 0,
           _id: expect.any(String)
         });
       });
   });
-  it('can get all candidatesByUsers', () => {
-    return CandidateByUser.create(userCandidate)
+  it('can get all scores', () => {
+    return Scores.create(scoreTest)
       .then(() => {
         return request(app)
-          .get('/api/v1/candidatesByUsers');
+          .get('/api/v1/scores');
       })
       .then(res => {
         expect(res.body).toHaveLength(1);
       });
   });
-  it('can get a candidateByUser by id', () => {
-    return CandidateByUser.create(userCandidate)
-      .then(createdUserCand => {
+  it('can get all scores by user id', () => {
+    return Scores.create(scoreTest)
+      .then(createdScore => {
         return request(app)
-          .get(`/api/v1/candidatesByUsers/${createdUserCand._id}`);
+          .get(`/api/v1/scores/${createdScore.user}`);
       })
       .then(res => {
-        expect(res.body).toEqual({
+        expect(res.body).toEqual([{
           candidate: expect.any(String),
           user: expect.any(String),
-          issue1Score: {
-            issue: expect.any(String),
-            score: 0
-          },
-          issue2Score: {
-            issue: expect.any(String),
-            score: 0
-          },
-          issue3Score: {
-            issue: expect.any(String),
-            score: 0
-          },
-          issue4Score: {
-            issue: expect.any(String),
-            score: 0
-          },
-          issue0Score: {
-            issue: expect.any(String),
-            score: 0
-          },
+          issue: expect.any(String),
+          score: 7,
           _id: expect.any(String)
-        });
+        }]);
       });
   });
-  it('can update an issue score', () => {
+  it('can update a score', () => {
     return CandidateByUser.create(userCandidate)
       .then(userCand => {
         return request(app)
@@ -202,6 +130,63 @@ describe('candidates by users routes', () => {
       })
       .then(deletedUserCand => {
         expect(deletedUserCand.body).toEqual({
+          candidate: expect.any(String),
+          user: expect.any(String),
+          issue1Score: {
+            issue: expect.any(String),
+            score: 0
+          },
+          issue2Score: {
+            issue: expect.any(String),
+            score: 0
+          },
+          issue3Score: {
+            issue: expect.any(String),
+            score: 0
+          },
+          issue4Score: {
+            issue: expect.any(String),
+            score: 0
+          },
+          issue0Score: {
+            issue: expect.any(String),
+            score: 0
+          },
+          _id: expect.any(String)
+        });
+      });
+  });
+  it('can get a list of candidatesbyusers by user id', () => {
+    return CandidateByUser.create({
+      candidate: '5cfab42626ba7379d3cea223',
+      user: '5cfab39926ba7379d3cea21f',
+      issue0Score: {
+        issue: '5cfab21c26ba7379d3cea21a',
+        score: 5
+      },
+      issue1Score: {
+        issue: '5cfab2c826ba7379d3cea21b',
+        score: 1
+      },
+      issue2Score: {
+        issue: '5cfab2d126ba7379d3cea21c',
+        score: 10
+      },
+      issue3Score: {
+        issue: '5cfab2da26ba7379d3cea21d',
+        score: 1
+      },
+      issue4Score: {
+        issue: '5cfab2e126ba7379d3cea21e',
+        score: 17
+      }
+    })
+      .then(createdUserCand => {
+        return request(app)
+          .get(`/api/v1/candidatesByUser/user/${createdUserCand.user}`);
+      })
+      .then(foundCand => {
+        expect(foundCand).toEqual({
           candidate: expect.any(String),
           user: expect.any(String),
           issue1Score: {
