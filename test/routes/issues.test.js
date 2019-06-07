@@ -62,4 +62,35 @@ describe('issues routes', () => {
           });
       });
   });
+  it('updates an issue', () => {
+    return Issue.create(issueOne)
+      .then(createdIssue => {
+        return request(app)
+          .patch(`/api/v1/issues/${createdIssue._id}`)
+          .send({
+            image: 'newImage.jpg',
+            description: 'better'
+          });
+      })
+      .then(res => {
+        expect(res.body).toEqual({ 
+          title: 'I am issue',
+          image: 'newImage.jpg',
+          description: 'better',
+          _id: expect.any(String)
+        });
+      });
+  });
+  it('deletes an issue by id', () => {
+    return Issue.create(issueOne)
+      .then(createdIssue => {
+        return request(app)
+          .delete(`/api/v1/issues/${createdIssue._id}`);
+      })
+      .then(deletedIssue => {
+        expect(deletedIssue.body).toEqual({
+          ...issueOne, _id: expect.any(String)
+        });
+      });
+  });
 });
