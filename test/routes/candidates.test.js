@@ -5,6 +5,12 @@ const Candidate = require('../../lib/models/Candidate');
 const connect = require('../../lib/utils/connect');
 const mongoose = require('mongoose');
 
+const coryBooker = {
+  name: 'cory booker',
+  image: 'picture.jpg',
+  bio: 'i am vegan'
+};
+
 describe('candidate routes', () => {
 
   beforeAll(() => {
@@ -49,6 +55,55 @@ describe('candidate routes', () => {
       })
       .then(res => {
         expect(res.body).toHaveLength(1);
+      });
+  });
+  it('can get a candidate by id', () => {
+    return Candidate.create({
+      image: 'string.jpg',
+      name: 'booker',
+      bio: 'hi'
+    })
+      .then(createdCandidate => {
+        return request(app)
+          .get(`/api/v1/candidates/${createdCandidate._id}`);
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          image: 'string.jpg',
+          name: 'booker',
+          bio: 'hi',
+          _id: expect.any(String)
+        });
+      });
+  });
+  it('can update a candidate\'s bio', () => {
+    return Candidate.create(coryBooker)
+      .then(createdCandidate => {
+        return request(app)
+          .patch(`/api/v1/candidates/${createdCandidate._id}`)
+          .send({
+            bio: 'better bio',
+            image: 'better.jpg'
+          });
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          name: 'cory booker',
+          bio: 'better bio',
+          image: 'better.jpg',
+          _id: expect.any(String)
+        });
+      });
+  });
+  it('deletes a candidate by id', () => {
+    return Candidate.create(coryBooker)
+      .then(createdCandidate => {
+        const id = createdCandidate._id;
+        return request(app)
+          .delete(`/api/v1/candidates/${id}`);
+      })
+      .then(deletedCandidate => {
+        expect(deletedCandidate.body).toEqual({ ...coryBooker, _id: expect.any(String) });
       });
   });
 });
