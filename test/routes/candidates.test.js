@@ -76,7 +76,7 @@ describe('candidate routes', () => {
         });
       });
   });
-  it('can update a candidate\'s bio', () => {
+  it('can update a candidate\'s bio and image', () => {
     return Candidate.create(coryBooker)
       .then(createdCandidate => {
         return request(app)
