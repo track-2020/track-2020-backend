@@ -35,9 +35,9 @@ describe('candidates by users routes', () => {
     return connect();
   });
 
-  // beforeEach((done) => {
-  //   return mongoose.connection.dropDatabase(done);
-  // });
+  beforeEach((done) => {
+    return mongoose.connection.dropDatabase(done);
+  });
   
   afterAll(() => {
     return mongoose.connection.close();
