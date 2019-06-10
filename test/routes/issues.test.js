@@ -16,9 +16,9 @@ describe('issues routes', () => {
     return connect();
   });
 
-  beforeEach((done) => {
-    return mongoose.connection.dropDatabase(done);
-  });
+  // beforeEach((done) => {
+  //   return mongoose.connection.dropDatabase(done);
+  // });
   
   afterAll(() => {
     return mongoose.connection.close();

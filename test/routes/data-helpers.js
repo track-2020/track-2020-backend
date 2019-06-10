@@ -17,9 +17,9 @@ beforeEach(() => {
     .send({ email: 'megan@megan', password: '1234', username: 'cindy', issues: [mongoose.Types.ObjectId()] });
 });
 
-afterEach((done) => {
-  return mongoose.connection.dropDatabase(done);
-});
+// afterEach((done) => {
+//   return mongoose.connection.dropDatabase(done);
+// });
 
 afterAll(() => {
   return mongoose.connection.close();
