@@ -118,19 +118,15 @@ describe('scores routes', () => {
           .get(`/api/v1/scores/totals/${createdScore.user}`);
       })
       .then(res => {
-        expect(res.body).toEqual([
-          { '5cfab41626ba7379d3cea222': {
-            name: 'warren',
-            image: 'image.jpg',
-            bio: 'vote',
-            '5cfab21c26ba7379d3cea21a': {
-              name:'environment',
-              image: 'image.jpg',
-              score: 4
+        expect(res.body).toEqual({
+          _id: '',
+          username: '',
+          issues: [{ _id: '', title: '', description: '' }],
+          candidates: [
+            { _id: '', name: '', image: '', bio: '', issues: [{ _id: '', title: '', score: 3 }]
             }
-          }
-          }
-        ]);
+          ] 
+        });
       });
   });
 });
