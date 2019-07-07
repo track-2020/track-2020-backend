@@ -106,27 +106,27 @@ describe('scores routes', () => {
         });
       });
   });
-  it('gets all scores by user and gives them back to ben how he wants them', () => {
-    return Scores.create({
-      user: '5cfb049f26ba7379d3cea23e',
-      issue: '5cfb03e026ba7379d3cea239',
-      candidate: '5cfb042226ba7379d3cea23c',
-      score: 4
-    })
-      .then(createdScore => {
-        return request(app)
-          .get(`/api/v1/scores/totals/${createdScore.user}`);
-      })
-      .then(res => {
-        expect(res.body).toEqual({
-          _id: '',
-          username: '',
-          issues: [{ _id: '', title: '', description: '' }],
-          candidates: [
-            { _id: '', name: '', image: '', bio: '', issues: [{ _id: '', title: '', score: 3 }]
-            }
-          ] 
-        });
-      });
-  });
+  // it('gets all scores by user and gives them back to ben how he wants them', () => {
+  //   return Scores.create({
+  //     user: '5cfb049f26ba7379d3cea23e',
+  //     issue: '5cfb03e026ba7379d3cea239',
+  //     candidate: '5cfb042226ba7379d3cea23c',
+  //     score: 4
+  //   })
+  //     .then(createdScore => {
+  //       return request(app)
+  //         .get(`/api/v1/scores/totals/${createdScore.user}`);
+  //     })
+  //     .then(res => {
+  //       expect(res.body).toEqual({
+  //         _id: '',
+  //         username: '',
+  //         issues: [{ _id: '', title: '', description: '' }],
+  //         candidates: [
+  //           { _id: '', name: '', image: '', bio: '', issues: [{ _id: '', title: '', score: 3 }]
+  //           }
+  //         ] 
+  //       });
+  //     });
+  // });
 });

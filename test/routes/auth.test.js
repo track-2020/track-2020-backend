@@ -40,7 +40,10 @@ describe('auth routes', () => {
           });
       })
       .then(res => {
-        expect(res.body).toEqual({ username: 'hello', issues: [expect.any(String)] });
+        expect(res.body).toEqual({ username: 'hello', issues: [{ _id: expect.any(String), title: expect.any(String), description: expect.any(String) }],
+          candidates: [
+            { _id: expect.any(String), name: expect.any(String), image: expect.any(String), bio: expect.any(String), issues: [{ _id: expect.any(String), title: expect.any(String), score: 3 }] }
+          ] });
       });
   });
 });
