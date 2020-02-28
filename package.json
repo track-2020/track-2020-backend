@@ -26,6 +26,7 @@
     "testEnvironment": "node"
   },
   "scripts": {
+    "lint": "eslint .",
     "test": "jest --verbose --runInBand",
     "test:watch": "npm run test -- --watch",
     "start": "node server.js",
