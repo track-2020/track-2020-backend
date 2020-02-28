@@ -1,7 +1,7 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 const User = require('../../lib/models/User');
-const { tokenize, untokenize } = require('../../lib/utils/token');
+const { tokenize } = require('../../lib/utils/token');
 
 describe('User model', () => {
   beforeAll(() => {
@@ -21,43 +21,43 @@ describe('User model', () => {
   });
 
   it('has a username, password, hash, issues array, and email', () => {
-    const objectId = mongoose.Types.ObjectId();
     const user = new User({
       username: 'fun user',
       password: 'password',
       email: 'email.com',
-      issues: [objectId]
+      issues: ['lgbtq+']
     });
     expect(user.toJSON()).toEqual({
       username: 'fun user',
       email: 'email.com',
       _id: expect.any(mongoose.Types.ObjectId),
-      issues: [objectId]
+      issues: ['lgbtq+']
     });
   });
   it('has a tempPassword', () => {
-    const objectId = mongoose.Types.ObjectId();
+
     const user = new User({
       username: 'fun user',
       password: 'password',
       email: 'email.com',
-      issues: [objectId]
+      issues: ['lgbtq+']
     });
     expect(user._tempPassword).toEqual('password');
   });
 
   it('can find a token', () => {
-    const objectId = mongoose.Types.ObjectId();
     return User.create({
       username: 'megan',
       password: 'password',
       email: 'email@email.com',
-      issues: [objectId]
+      issues: ['lgbtq+']
     })
       .then(payload => {
+        console.log(payload)
         return tokenize(payload);
       })
       .then(token => {
+        console.log(token)
         return User.findByToken(token);
       })
       .then(foundUser => {
@@ -65,7 +65,7 @@ describe('User model', () => {
           username: 'megan',
           email: 'email@email.com',
           _id: expect.any(String),
-          issues: [objectId.toString()]
+          issues: ['lgbtq+']
         });
       });
   });
