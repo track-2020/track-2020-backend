@@ -53,11 +53,9 @@ describe('User model', () => {
       issues: ['lgbtq+']
     })
       .then(payload => {
-        console.log(payload)
         return tokenize(payload);
       })
       .then(token => {
-        console.log(token)
         return User.findByToken(token);
       })
       .then(foundUser => {
