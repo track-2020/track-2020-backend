@@ -17,9 +17,9 @@ beforeEach(() => {
     .send({ email: 'megan@megan', password: 'password', username: 'cindy', issues: ['lgbtq'] });
 });
 
-// afterEach((done) => {
-//   return mongoose.connection.dropDatabase(done);
-// });
+afterEach((done) => {
+  return mongoose.connection.dropDatabase(done);
+});
 
 afterAll(() => {
   return mongoose.connection.close();
