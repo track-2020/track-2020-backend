@@ -14,7 +14,7 @@ const agent = request.agent(app);
 beforeEach(() => {
   return agent
     .post('/api/v1/auth/signup')
-    .send({ email: 'megan@megan', password: 'password', username: 'cindy', issues: ['lgbtq+'] });
+    .send({ email: 'megan@megan', password: 'password', username: 'cindy', issues: ['lgbtq'] });
 });
 
 // afterEach((done) => {

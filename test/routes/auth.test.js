@@ -22,7 +22,7 @@ describe('auth routes', () => {
         username: 'bob',
         email: 'email@bob.com',
         password: 'password',
-        issues: ['lgbtq+']
+        issues: ['lgbtq']
       })
       .then(res => {
         expect(res.body).toEqual({
@@ -39,7 +39,7 @@ describe('auth routes', () => {
       username: 'hello',
       email: 'emailed@hello.com',
       password: 'pass',
-      issues: ['lgbtq+']
+      issues: ['lgbtq']
     })
       .catch(err => {
         const result = err instanceof KnownError;
@@ -52,7 +52,7 @@ describe('auth routes', () => {
       username: 'hello',
       email: 'emailed@hello.com',
       password: 'password',
-      issues: ['lgbtq+']
+      issues: ['lgbtq']
     })
       .then(() => {
         return request(app)
