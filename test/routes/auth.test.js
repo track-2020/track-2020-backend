@@ -48,12 +48,14 @@ describe('auth routes', () => {
   });
 
   it('can login a user', () => { 
-    return User.create({
-      username: 'hello',
-      email: 'emailed@hello.com',
-      password: 'password',
-      issues: ['lgbtq']
-    })
+    return request(app)
+      .post('/api/v1/auth/signup')
+      .send({
+        username: 'hello',
+        email: 'emailed@hello.com',
+        password: 'password',
+        issues: ['lgbtq']
+      })
       .then(() => {
         return request(app)
           .post('/api/v1/auth/login')
