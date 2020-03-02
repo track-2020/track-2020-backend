@@ -11,6 +11,10 @@ describe('auth routes', () => {
     return mongoose.connection.dropDatabase();
   });
 
+  beforeEach(() => {
+    return User.init();
+  });
+
   afterAll(() => {
     return mongoose.connection.close();
   });
@@ -31,6 +35,30 @@ describe('auth routes', () => {
           issues: expect.any(Array),
           _id: expect.any(String)
         });
+      });
+  });
+
+  it('rejects multiple same emails', () => {
+    return request(app)
+      .post('/api/v1/auth/signup')
+      .send({
+        username: 'bob',
+        email: 'email@bob.com',
+        password: 'password',
+        issues: ['lgbtq']
+      })
+      .then(() => {
+        return request(app)
+          .post('/api/v1/auth/signup')
+          .send({
+            username: 'bob',
+            email: 'email@bob.com',
+            password: 'password',
+            issues: ['lgbtq']
+          });
+      })
+      .then(({ body }) => {
+        expect(body.error).toEqual('This email already exists, try a different email.');
       });
   });
 
