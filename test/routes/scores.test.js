@@ -16,14 +16,27 @@ describe('scores routes', () => {
   beforeEach(() => {
     return mongoose.connection.dropDatabase();
   });
+  
 
+  const agent = request.agent(app);
+  
+  beforeEach(() => {
+    return agent
+      .post('/api/v1/auth/signup')
+      .send({
+        username: 'joe',
+        email: 'joe@joe.com',
+        password: 'password',
+        issues: ['lgbtq']
+      });
+  });
 
   afterAll(() => {
     return mongoose.connection.close();
   });
   
   it('can create a new score', () => {
-    return request(app)
+    return agent
       .post('/api/v1/scores')
       .send({
         candidate: 'biden',
@@ -44,10 +57,11 @@ describe('scores routes', () => {
         });
       });
   });
+
   it('can get a score by user id', () => {
     return Scores.create(scoreTestData[0])
       .then(createdScore => {
-        return request(app)
+        return agent
           .get(`/api/v1/scores/${createdScore.user}`);
       })
       .then(res => {
@@ -59,18 +73,13 @@ describe('scores routes', () => {
   });
   
   it('can get multiples score by user id', () => {
-    const createScore = scoreTest => {
-      return Scores.create(scoreTest);
+    const createScores = scoreTestData => {
+      return Promise.all(scoreTestData.map(scoreTest => Scores.create(scoreTest)));
     };
-    const awaitScore = async scoreTest => {
-      return createScore(scoreTest);
-    };
-    const createScores = async scoreTestData => {
-      return Promise.all(scoreTestData.map(scoreTest => awaitScore(scoreTest)));
-    };
+
     return createScores(scoreTestData)
       .then(createdScores => {
-        return request(app)
+        return agent
           .get(`/api/v1/scores/${createdScores[1].user}`);
       })
       .then(res => {
