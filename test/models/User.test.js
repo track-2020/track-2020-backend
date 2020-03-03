@@ -25,13 +25,13 @@ describe('User model', () => {
       username: 'fun user',
       password: 'password',
       email: 'email.com',
-      issues: ['lgbtq+']
+      issues: ['lgbtq']
     });
     expect(user.toJSON()).toEqual({
       username: 'fun user',
       email: 'email.com',
       _id: expect.any(mongoose.Types.ObjectId),
-      issues: ['lgbtq+']
+      issues: ['lgbtq']
     });
   });
   it('has a tempPassword', () => {
@@ -40,7 +40,7 @@ describe('User model', () => {
       username: 'fun user',
       password: 'password',
       email: 'email.com',
-      issues: ['lgbtq+']
+      issues: ['lgbtq']
     });
     expect(user._tempPassword).toEqual('password');
   });
@@ -50,7 +50,7 @@ describe('User model', () => {
       username: 'megan',
       password: 'password',
       email: 'email@email.com',
-      issues: ['lgbtq+']
+      issues: ['lgbtq']
     })
       .then(payload => {
         return tokenize(payload);
@@ -63,7 +63,7 @@ describe('User model', () => {
           username: 'megan',
           email: 'email@email.com',
           _id: expect.any(String),
-          issues: ['lgbtq+']
+          issues: ['lgbtq']
         });
       });
   });

@@ -11,6 +11,10 @@ describe('auth routes', () => {
     return mongoose.connection.dropDatabase();
   });
 
+  beforeEach(() => {
+    return User.init();
+  });
+
   afterAll(() => {
     return mongoose.connection.close();
   });
@@ -22,7 +26,7 @@ describe('auth routes', () => {
         username: 'bob',
         email: 'email@bob.com',
         password: 'password',
-        issues: ['lgbtq+']
+        issues: ['lgbtq']
       })
       .then(res => {
         expect(res.body).toEqual({
@@ -34,12 +38,36 @@ describe('auth routes', () => {
       });
   });
 
+  it('rejects multiple same emails', () => {
+    return request(app)
+      .post('/api/v1/auth/signup')
+      .send({
+        username: 'bob',
+        email: 'email@bob.com',
+        password: 'password',
+        issues: ['lgbtq']
+      })
+      .then(() => {
+        return request(app)
+          .post('/api/v1/auth/signup')
+          .send({
+            username: 'bob',
+            email: 'email@bob.com',
+            password: 'password',
+            issues: ['lgbtq']
+          });
+      })
+      .then(({ body }) => {
+        expect(body.error).toEqual('This email already exists, try a different email.');
+      });
+  });
+
   it('rejects a password less than 8 digits long with KnownError', () => {
     return User.create({
       username: 'hello',
       email: 'emailed@hello.com',
       password: 'pass',
-      issues: ['lgbtq+']
+      issues: ['lgbtq']
     })
       .catch(err => {
         const result = err instanceof KnownError;
@@ -48,12 +76,14 @@ describe('auth routes', () => {
   });
 
   it('can login a user', () => { 
-    return User.create({
-      username: 'hello',
-      email: 'emailed@hello.com',
-      password: 'password',
-      issues: ['lgbtq+']
-    })
+    return request(app)
+      .post('/api/v1/auth/signup')
+      .send({
+        username: 'hello',
+        email: 'emailed@hello.com',
+        password: 'password',
+        issues: ['lgbtq']
+      })
       .then(() => {
         return request(app)
           .post('/api/v1/auth/login')
